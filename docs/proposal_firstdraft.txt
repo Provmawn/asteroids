@@ -1,0 +1,9 @@
+﻿254 Project Proposal
+Colin Hughes
+Moustapha Said
+Amman Sandhu
+
+
+We plan to create a 2D shooting game, similar to Asteroids, using C++ and an open source library to handle sprites and inputs. 
+The goal of the project is to have full control of movement and shooting projectiles in all 8 cardinal directions, and to have an endless loop of enemies or obstacles supplied.
+We aim to use SDL as the backbone of our game, an open source libraries for C/C++ that allow drawing of sprites to surfaces and the reading of keyboard and joypad input. The library can be found here: http://www.libsdl.org/
