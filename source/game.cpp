@@ -1,10 +1,13 @@
 #include "game.h"
 
+
 static SDL_Renderer* renderer = nullptr;
+Ship* s;
 
 Game::Game() {
     quit = false;
     window = NULL;
+    s = new Ship();
 }
 
 Game::~Game() {
@@ -44,14 +47,17 @@ void Game::handleEvents() {
         default:
             break;
     }
+    s->handleEvents(e);
 }
 
 void Game::update() {
-
+    s->update();
 }
 
 void Game::render() {
+    SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
     SDL_RenderClear(renderer);
+    s->render(renderer);
     SDL_RenderPresent(renderer);
 }
 
