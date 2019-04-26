@@ -1,4 +1,4 @@
-﻿254 Project Proposal
+254 Project Proposal
 Colin Hughes
 Moustapha Said
 Amman Sandhu
@@ -7,3 +7,5 @@ Amman Sandhu
 We plan to create a 2D shooting game, similar to Asteroids, using C++ and an open source library to handle sprites and inputs. 
 The goal of the project is to have full control of movement and shooting projectiles in all 8 cardinal directions, and to have an endless loop of enemies or obstacles supplied.
 We aim to use SDL as the backbone of our game, an open source libraries for C/C++ that allow drawing of sprites to surfaces and the reading of keyboard and joypad input. The library can be found here: http://www.libsdl.org/
+
+We planned to initiate 4 classes in this project. The first one which is the Ship class is going to be handled by Amman. The second class is going to be called Rock which represents the asteroids and is going to be handled by Moustapha. The third class is called Bullets and Colin is going to be working on it. Finally, there is the the Game class which joins all the other classes and handles everything, this class is going to be worked on by all three team members after we finish the other three classes.  
