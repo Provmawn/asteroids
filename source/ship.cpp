@@ -1,7 +1,10 @@
 #include "ship.h"
 
 Ship::Ship() {
-    hitbox = {0, 0, 100, 100};
+    hitbox.x = 0;
+    hitbox.y = 0;
+    hitbox.w = 100;
+    hitbox.h = 100;
     posX = 0;
     posY = 0;
     velX = 1;
