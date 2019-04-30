@@ -3,8 +3,10 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <iostream>
+#include <cmath>
 #include "ship.h"
 #include "rocks.h"
+#include "bullets.h"
 
 
 class Game {
