@@ -5,7 +5,7 @@ TARGET = game
 
 LINKERFLAG = -lSDL2 -lSDL2_image 
 
-DEP = main.cpp game.cpp ship.cpp rocks.cpp bullets.cpp
+DEP = main.cpp game.cpp ship.cpp rock.cpp bullet.cpp
 
 $(TARGET): $(DEP)
 	$(CC) $(DEP) $(LINKERFLAG) -o $(TARGET)

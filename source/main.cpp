@@ -2,8 +2,8 @@
 
 Game* game = nullptr;
 
-int SCREEN_WIDTH = 1080;
-int SCREEN_HEIGHT = 720;
+extern const int SCREEN_WIDTH = 1080;
+extern const int SCREEN_HEIGHT = 720;
 
 int main(int argc, const char* argv[]) {
     game = new Game();

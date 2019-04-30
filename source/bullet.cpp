@@ -1,4 +1,4 @@
-#include "bullets.h"
+#include "bullet.h"
 
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
@@ -68,8 +68,5 @@ void Bullets::free() {
 }
 
 const SDL_Rect& Bullets::GetRect()const{
-
-return hitbox;
-
-
+    return hitbox;
 }

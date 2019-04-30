@@ -4,10 +4,10 @@
 #include <SDL2/SDL_image.h>
 #include <iostream>
 
-class Rocks {
+class Rock {
     public:
-        Rocks();
-        ~Rocks();
+        Rock();
+        ~Rock();
         void update();
         void render(SDL_Renderer* render);
         void free();

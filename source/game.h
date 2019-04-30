@@ -5,8 +5,8 @@
 #include <iostream>
 #include <cmath>
 #include "ship.h"
-#include "rocks.h"
-#include "bullets.h"
+#include "rock.h"
+#include "bullet.h"
 
 
 class Game {

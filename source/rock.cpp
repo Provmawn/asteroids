@@ -1,10 +1,10 @@
-#include "rocks.h"
+#include "rock.h"
 
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 
 
-Rocks::Rocks() {
+Rock::Rock() {
     hitbox.x=0;
     hitbox.y=0;
     hitbox.w=10;
@@ -15,11 +15,11 @@ Rocks::Rocks() {
     velY = 1;
 }
 
-Rocks::~Rocks() {
+Rock::~Rock() {
     free();
 }
 
-void Rocks::update() {
+void Rock::update() {
     hitbox.x = posX;
     hitbox.y = posY;
     posX += velX;
@@ -32,18 +32,18 @@ void Rocks::update() {
     }
 }
 
-void Rocks::render(SDL_Renderer* render) {
+void Rock::render(SDL_Renderer* render) {
     SDL_SetRenderDrawColor(render, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderFillRect(render, &hitbox);
 }
 
 
-void Rocks::free() {
+void Rock::free() {
     velX = 0;
     velY = 0;
 }
 
-const SDL_Rect& Rocks::GetRect()const{
+const SDL_Rect& Rock::GetRect()const{
 
 return hitbox;
 

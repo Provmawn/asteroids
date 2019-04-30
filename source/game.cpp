@@ -2,13 +2,14 @@
 
 
 static SDL_Renderer* renderer = nullptr;
-Rocks* r;
+
+Rock* r;
 Ship* s;
 
 Game::Game() {
     quit = false;
     window = NULL;
-    r = new Rocks();
+    r = new Rock();
     s = new Ship();
 }
 
