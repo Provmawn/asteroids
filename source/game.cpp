@@ -2,11 +2,13 @@
 
 
 static SDL_Renderer* renderer = nullptr;
+Rocks* r;
 Ship* s;
 
 Game::Game() {
     quit = false;
     window = NULL;
+    r = new Rocks();
     s = new Ship();
 }
 
@@ -51,6 +53,7 @@ void Game::handleEvents() {
 }
 
 void Game::update() {
+    r->update();
     s->update();
 }
 
@@ -58,10 +61,13 @@ void Game::render() {
     SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
     SDL_RenderClear(renderer);
     s->render(renderer);
+    r->render(renderer);
     SDL_RenderPresent(renderer);
 }
 
 void Game::close() {
+    delete s;
+    delete r;
     IMG_Quit();
     SDL_Quit();
 }

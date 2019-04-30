@@ -1,5 +1,9 @@
 #include "rocks.h"
 
+extern const int SCREEN_WIDTH;
+extern const int SCREEN_HEIGHT;
+
+
 Rocks::Rocks() {
     hitbox.x=0;
     hitbox.y=0;
@@ -18,6 +22,14 @@ Rocks::~Rocks() {
 void Rocks::update() {
     hitbox.x = posX;
     hitbox.y = posY;
+    posX += velX;
+    posY += velY;
+    if (posX < 0 || posX + hitbox.w > ::SCREEN_WIDTH) {
+        velX = -velX;
+    }
+    if (posY < 0 || posY + hitbox.h > ::SCREEN_HEIGHT) {
+        velY = -velY;
+    }
 }
 
 void Rocks::render(SDL_Renderer* render) {
