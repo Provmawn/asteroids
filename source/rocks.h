@@ -9,6 +9,7 @@ class Rocks {
         Rocks();
         ~Rocks();
         void update();
+        void subpixel();
         void render(SDL_Renderer* render);
         void free();
         const SDL_Rect& GetRect()const;
@@ -19,6 +20,8 @@ class Rocks {
         int posY;
         int velX;
         int velY;
+        int subX;
+        int subY;
 };
 
 #endif

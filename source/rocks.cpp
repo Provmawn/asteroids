@@ -13,6 +13,8 @@ Rocks::Rocks() {
     posY = 0;
     velX = 1;
     velY = 1;
+    subX = 0;
+    subY = 0;
 }
 
 Rocks::~Rocks() {
@@ -31,6 +33,26 @@ void Rocks::update() {
         velY = -velY;
     }
 }
+
+void Rocks::subpixel() {
+	//assume signs of movement are positive
+	    int signX = copysign(1.0,velX);
+	    int signY = copysign(1.0,velY);
+	//move subpixel amount forward by velocity
+		subX += velX;
+		subY += velY;
+	//change actual position whenever subpixels exceed 1
+	while( abs(subX) >= 1 ) {
+		posX += signX;
+		subX -= signX;
+	}
+	while( abs(subY) >= 1 ) {
+		posY += signY;
+		subY -= signY;
+	}
+}
+
+
 
 void Rocks::render(SDL_Renderer* render) {
     SDL_SetRenderDrawColor(render, 0xFF, 0xFF, 0xFF, 0xFF);
