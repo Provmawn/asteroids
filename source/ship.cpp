@@ -7,7 +7,7 @@ Ship::Ship() {
     hitbox.h = 100;
     posX = 0;
     posY = 0;
-    velX = 1;
+    velX = 2;
     velY = 2;
 }
 
