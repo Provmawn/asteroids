@@ -4,7 +4,7 @@ extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 
 
-Bullets::Bullets() {
+Bullet::Bullet() {
 //initialize bullets
     hitbox.x=0;
     hitbox.y=0;
@@ -18,11 +18,11 @@ Bullets::Bullets() {
     subY = 0.0;
 }
 
-Bullets::~Bullets() {
+Bullet::~Bullet() {
     free();
 }
 
-void Bullets::update() {
+void Bullet::update() {
 //update subpixel movement
     subpixel();
 //move hitbox to reflect current position
@@ -30,14 +30,14 @@ void Bullets::update() {
     hitbox.y = posY;
 //destroy bullets that exist the screen
     if (posX < 0 || posX + hitbox.w > ::SCREEN_WIDTH) {
-        free();
+        velX = -velX;
     }
     if (posY < 0 || posY + hitbox.h > ::SCREEN_HEIGHT) {
-        free();
+        velY = -velY;
     }
 }
 
-void Bullets::subpixel() {
+void Bullet::subpixel() {
 	//assume signs of movement are positive
 	    int signX = copysign(1.0,velX);
 	    int signY = copysign(1.0,velY);
@@ -55,18 +55,18 @@ void Bullets::subpixel() {
 	}
 }
 
-void Bullets::render(SDL_Renderer* render) {
+void Bullet::render(SDL_Renderer* render) {
     SDL_SetRenderDrawColor(render, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderFillRect(render, &hitbox);
 }
 
 
-void Bullets::free() {
+void Bullet::free() {
 //change this to destroy/deallocate bullets?
     velX = 0;
     velY = 0;
 }
 
-const SDL_Rect& Bullets::GetRect()const{
+const SDL_Rect& Bullet::GetRect()const{
     return hitbox;
 }

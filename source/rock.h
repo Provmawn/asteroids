@@ -1,5 +1,5 @@
-#ifndef ROCKS_H
-#define ROCKS_H
+#ifndef ROCK_H
+#define ROCK_H
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <iostream>

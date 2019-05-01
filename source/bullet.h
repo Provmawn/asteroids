@@ -1,13 +1,13 @@
-#ifndef BULLETS_H
-#define BULLETS_H
+#ifndef BULLET_H
+#define BULLET_H
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <iostream>
 
-class Bullets {
+class Bullet {
     public:
-        Bullets();
-        ~Bullets();
+        Bullet();
+        ~Bullet();
         void update();
         void render(SDL_Renderer* render);
 	void subpixel();

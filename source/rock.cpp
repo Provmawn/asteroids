@@ -4,19 +4,20 @@ extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 
 
+
 Rock::Rock() {
     hitbox.x=0;
     hitbox.y=0;
     hitbox.w=10;
     hitbox.h=10;
-    posX = 0;
-    posY = 0;
-    velX = 1;
-    velY = 1;
+    posX = ::SCREEN_WIDTH / 2;
+    posY = ::SCREEN_HEIGHT / 2;
+    std::cout << __FILE__ << ": constructor..." << std::endl;
+    velX = (rand() % 10) + 1;
+    velY = (rand() % 10) + 1;
 }
 
 Rock::~Rock() {
-    free();
 }
 
 void Rock::update() {
@@ -39,8 +40,7 @@ void Rock::render(SDL_Renderer* render) {
 
 
 void Rock::free() {
-    velX = 0;
-    velY = 0;
+    delete this;
 }
 
 const SDL_Rect& Rock::GetRect()const{
