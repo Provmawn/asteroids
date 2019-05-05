@@ -1,3 +1,3 @@
-#Asteroids
+# Asteroids
 
-##How to install
+## How to install
