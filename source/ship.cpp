@@ -1,14 +1,12 @@
 #include "ship.h"
 
-Ship::Ship() {
+Ship::Ship() 
+    : bulletVelX(0), bulletVelY(0), posX(0), posY(0), velX(2), velY(2)
+{
     hitbox.x = 0;
     hitbox.y = 0;
     hitbox.w = 100;
     hitbox.h = 100;
-    posX = 0;
-    posY = 0;
-    velX = 2;
-    velY = 2;
 }
 
 Ship::~Ship() {
@@ -26,17 +24,48 @@ void Ship::render(SDL_Renderer* render) {
 }
 
 void Ship::handleEvents(SDL_Event e) {
-const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
-if( currentKeyStates[ SDL_SCANCODE_UP ] )
-{ posY -= velX; }
-if( currentKeyStates[ SDL_SCANCODE_DOWN ] )
-{ posY += velY; } 
-if( currentKeyStates[ SDL_SCANCODE_LEFT ] )
-{ posX -= velX; } 
-if( currentKeyStates[ SDL_SCANCODE_RIGHT ] )
-{ posX += velY; } 
+    static const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
+    if ( currentKeyStates[ SDL_SCANCODE_W ] ) {
+        posY -= velY; 
+    }
+    if ( currentKeyStates[ SDL_SCANCODE_A ] ) {
+        posX -= velX;
+    }
+    if ( currentKeyStates[ SDL_SCANCODE_S ] ) {
+        posY += velY;
+    }
+    if ( currentKeyStates[ SDL_SCANCODE_D ] ) {
+        posX += velX; 
+    }
+    if ( currentKeyStates[ SDL_SCANCODE_SPACE ] ) {
+        SDL_GetMouseState(&mouseX, &mouseY);
+        calculateBulletVelocity();
+        bulletList.push_back(Bullet(posX + hitbox.w / 2, posY + hitbox.h / 2, bulletVelX, bulletVelY));
+    }
 }
+
+void Ship::calculateBulletVelocity() {
+    double dx = mouseX - posX;
+    double dy = mouseY - posY;
+    double theta = atan2(dy, dx);
+    bulletVelX = cos(theta) * 5.0;
+    bulletVelY = sin(theta) * 5.0;
+}
+
 void Ship::free() {
     velX = 0;
     velY = 0;
+}
+
+void Ship::removeBullet(int i) {
+    std::swap(bulletList[i], bulletList.back());
+    bulletList.pop_back();
+}
+
+void Ship::bulletUpdate(int i) {
+    bulletList[i].update();
+}
+
+void Ship::bulletRender(int i, SDL_Renderer* renderer) {
+    bulletList[i].render(renderer);
 }

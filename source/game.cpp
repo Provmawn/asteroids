@@ -6,21 +6,17 @@
 
 static SDL_Renderer* renderer = nullptr;
 
-Ship* s;
+Ship s;
 
-std::vector<Rock*> rockList;
-std::vector<Rock*>::iterator rockItr;
-//std::vector<Bullet*> bulletList;
-//std::vector<Bullet*>::iterator bulletItr;
+std::vector<Rock> rockList;
+std::vector<Rock>::iterator rockItr;
 
 Game::Game() {
     quit = false;
     window = NULL;
-    s = new Ship();
-    for (int i = 0; i < 10; ++i) {
-        rockList.push_back(new Rock());
+    for (int i = 0; i < 1; ++i) {
+        rockList.push_back(Rock());
     }
-
 }
 
 Game::~Game() {
@@ -60,31 +56,41 @@ void Game::handleEvents() {
         default:
             break;
     }
-    s->handleEvents(e);
+    s.handleEvents(e);
 }
 
 void Game::update() {
-    s->update();
-    for (rockItr = rockList.begin(); rockItr != rockList.end(); ++ rockItr) {
-        (*rockItr)->update();
+
+    s.update();
+    for (int i = 0; i < s.getBulletListSize(); ++i) {
+        s.bulletUpdate(i);
+        if (s.bulletIsRemovable(i)) {
+            s.removeBullet(i);
+            break;
+        }
     }
+    for (int i = 0; i < rockList.size(); ++i) {
+        rockList[i].update();
+    }
+
 }
 
 void Game::render() {
     SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
     SDL_RenderClear(renderer);
-    s->render(renderer);
-    for (rockItr = rockList.begin(); rockItr != rockList.end(); ++ rockItr) {
-        (*rockItr)->render(renderer);
+
+    s.render(renderer);
+    for (int i = 0; i < s.getBulletListSize(); ++i) {
+        s.bulletRender(i, renderer);
     }
+    for (int i = 0; i < rockList.size(); ++i) {
+        rockList[i].render(renderer);
+    }
+
     SDL_RenderPresent(renderer);
 }
 
 void Game::close() {
-    delete s;
-    for (rockItr = rockList.end(); rockItr != rockList.begin(); --rockItr) {
-        (*rockItr)->free();
-    }
     rockList.clear();
     IMG_Quit();
     SDL_Quit();
