@@ -58,7 +58,7 @@ void Bullet::free() {
 //change this to destroy/deallocate bullets?
 }
 
-const SDL_Rect& Bullet::GetRect() const {
+const SDL_Rect& Bullet::getRect() const {
     return hitbox;
 }
 

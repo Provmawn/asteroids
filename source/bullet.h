@@ -12,7 +12,7 @@ class Bullet {
         void render(SDL_Renderer* render);
 	void subpixel();
         void free();
-        const SDL_Rect& GetRect() const;
+        const SDL_Rect& getRect() const;
 
         void setRemoveStatus(bool status) { removeStatus = status; }
         bool isRemovable() { return removeStatus; }

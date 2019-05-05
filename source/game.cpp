@@ -6,21 +6,16 @@
 
 static SDL_Renderer* renderer = nullptr;
 
-Ship s;
-
-std::vector<Rock> rockList;
-std::vector<Rock>::iterator rockItr;
 
 Game::Game() {
     quit = false;
     window = NULL;
-    for (int i = 0; i < 1; ++i) {
+    for (int i = 0; i < 20; ++i) {
         rockList.push_back(Rock());
     }
 }
 
 Game::~Game() {
-    close();
 }
 
 void Game::init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen) {
@@ -49,12 +44,9 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 void Game::handleEvents() {
     SDL_Event e;
     SDL_PollEvent(&e);
-    switch (e.type) {
-        case SDL_QUIT:
-            quit = true;
-            break;
-        default:
-            break;
+    if (e.type == SDL_QUIT) {
+        quit = true;
+        return;
     }
     s.handleEvents(e);
 }
@@ -62,15 +54,33 @@ void Game::handleEvents() {
 void Game::update() {
 
     s.update();
-    for (int i = 0; i < s.getBulletListSize(); ++i) {
+    for (int i = 0; i < rockList.size(); ) {
+        rockList[i].update();
+        if (SDL_HasIntersection(&(rockList[i].getRect()), &(s.getRect())) == SDL_TRUE) {
+            s.lowerHp();
+            std::swap(rockList[i], rockList.back());
+            rockList.pop_back();
+            continue;
+        }
+        ++i;
+    }
+    for (int i = 0; i < s.getBulletListSize(); ) {
         s.bulletUpdate(i);
+        for (int j = 0; j < rockList.size(); ) {
+            if (SDL_HasIntersection(&(s.getBulletHitbox(i)), &(rockList[j].getRect())) == SDL_TRUE) {
+                s.setBulletRemoveStatus(i, true);
+
+                std::swap(rockList[j], rockList.back());
+                rockList.pop_back();
+                continue;
+            }
+            ++j;
+        }
         if (s.bulletIsRemovable(i)) {
             s.removeBullet(i);
-            break;
+            continue;
         }
-    }
-    for (int i = 0; i < rockList.size(); ++i) {
-        rockList[i].update();
+        ++i;
     }
 
 }

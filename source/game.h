@@ -23,6 +23,9 @@ class Game {
         bool running() { return !quit; }
 
     private:
+        Ship s;
+        std::vector<Rock> rockList;
+
         bool quit;
         SDL_Window* window;
 };

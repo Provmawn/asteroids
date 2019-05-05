@@ -15,12 +15,19 @@ class Ship {
         void update();
         void render(SDL_Renderer* render);
         void handleEvents(SDL_Event e);
+        const SDL_Rect& getRect() const;
+
         void free();
-        void removeBullet(int i);
+        void lowerHp();
+
         void bulletUpdate(int i);
         void bulletRender(int i, SDL_Renderer* renderer);
-        bool bulletIsRemovable(int i) { return bulletList[i].isRemovable(); }
+        void removeBullet(int i);
+
+        const SDL_Rect& getBulletHitbox(int i) const { return bulletList[i].getRect(); }
         int getBulletListSize() { return bulletList.size(); }
+        bool bulletIsRemovable(int i) { return bulletList[i].isRemovable(); }
+        void setBulletRemoveStatus(int i, bool status) { bulletList[i].setRemoveStatus(status); }
     private:
         void calculateBulletVelocity();
         std::vector<Bullet> bulletList;
@@ -33,6 +40,8 @@ class Ship {
         int posY;
         int velX;
         int velY;
+        int hp;
+        unsigned int atkSpd;
 };
 
 #endif

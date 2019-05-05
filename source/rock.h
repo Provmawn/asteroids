@@ -12,7 +12,7 @@ class Rock {
         void subpixel();
         void render(SDL_Renderer* render);
         void free();
-        const SDL_Rect& GetRect()const;
+        const SDL_Rect& getRect() const;
 
     private:
         SDL_Rect hitbox;
