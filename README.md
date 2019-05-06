@@ -36,6 +36,7 @@ make -f Makefile
 After the process is complete, source/ will have a game exec file. To play it type:
 ```
 ./game
-``` ## How to play
+```
+## How to play
 The game is simple, avoid asteroids by moving around usinfg ASDE keyboard keys. In case you want shoot the asteroids use the space button on the keyboard. You can hold on to the space button while moving around and that will help you shoot a lot of bullets while moving around at the same time. Furthermore, if you want to change the direction of the bullets just use your mouse cursor while shooting the bullets.
 Thanks for playing. Enjoy ! 
