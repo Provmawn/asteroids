@@ -1,21 +1,30 @@
 #include "ship.h"
 
 Ship::Ship() 
-    : mouseX(0), mouseY(0), bulletVelX(0), bulletVelY(0), posX(0), posY(0), velX(5), velY(5), hp(3), atkSpd(0)
+    : mouseX(0), mouseY(0), bulletVelX(0), bulletVelY(0), posX(0), posY(0), velX(5), velY(5), hp(3), atkSpd(0),
+      up(false), left(false), down(false), right(false), shooting(false)
 {
     hitbox.x = 0;
     hitbox.y = 0;
-    hitbox.w = 100;
-    hitbox.h = 100;
+    hitbox.w = 32;
+    hitbox.h = 32;
 }
 
 Ship::~Ship() {
 }
 
 void Ship::update() {
+    if (up) { posY -= velY; }
+    if (left) { posX -= velX; }
+    if (down) { posY += velY; }
+    if (right) { posX += velX; }
     hitbox.x = posX;
     hitbox.y = posY;
-    ++atkSpd;
+    if (++atkSpd % 10 == 0 && shooting) {
+        SDL_GetMouseState(&mouseX, &mouseY);
+        calculateBulletVelocity();
+        bulletList.push_back(Bullet(posX + hitbox.w / 2, posY + hitbox.h / 2, bulletVelX, bulletVelY));
+    }
 }
 
 void Ship::render(SDL_Renderer* render) {
@@ -24,6 +33,50 @@ void Ship::render(SDL_Renderer* render) {
 }
 
 void Ship::handleEvents(SDL_Event e) {
+    if (e.type == SDL_KEYDOWN) {
+        std::cout << "KEYDOWN" << std::endl;
+        switch (e.key.keysym.sym) {
+            case SDLK_w:
+                up = true;
+                break;
+            case SDLK_a:
+                left = true;
+                break;
+            case SDLK_s:
+                down = true;
+                break;
+            case SDLK_d:
+                right = true;
+                break;
+            case SDLK_SPACE:
+                shooting = true;
+                break;
+            default:
+                break;
+        }
+    }
+    if (e.type == SDL_KEYUP) {
+        switch (e.key.keysym.sym) {
+            case SDLK_w:
+                up = false;
+                break;
+            case SDLK_a:
+                left = false;
+                break;
+            case SDLK_s:
+                down = false;
+                break;
+            case SDLK_d:
+                right = false;
+                break;
+            case SDLK_SPACE:
+                shooting = false;
+                break;
+            default:
+                break;
+        }
+    }
+/*
     static const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
     if ( currentKeyStates[ SDL_SCANCODE_W ] ) {
         posY -= velY; 
@@ -41,7 +94,7 @@ void Ship::handleEvents(SDL_Event e) {
         SDL_GetMouseState(&mouseX, &mouseY);
         calculateBulletVelocity();
         bulletList.push_back(Bullet(posX + hitbox.w / 2, posY + hitbox.h / 2, bulletVelX, bulletVelY));
-    }
+    }*/
 }
 
 void Ship::lowerHp() {

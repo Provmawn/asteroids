@@ -34,14 +34,12 @@ class Ship {
         SDL_Rect hitbox;
         int mouseX;
         int mouseY;
-        double bulletVelX;
-        double bulletVelY;
-        int posX;
-        int posY;
-        int velX;
-        int velY;
+        double bulletVelX, bulletVelY;
+        int posX ,posY;
+        int velX, velY;
         int hp;
         unsigned int atkSpd;
+        bool up, left, down, right, shooting;
 };
 
 #endif

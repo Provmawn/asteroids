@@ -42,14 +42,16 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 }
 
 void Game::handleEvents() {
-    SDL_Event e;
-    while (SDL_PollEvent(&e))
-        ;
-    if (e.type == SDL_QUIT) {
-        quit = true;
-        return;
+    static SDL_Event e;
+    while (SDL_PollEvent(&e)) {
+        if (e.type == SDL_QUIT) {
+            quit = true;
+            return;
+        }
+        if (e.type == SDL_KEYDOWN || e.type == SDL_KEYUP) {
+            s.handleEvents(e);
+        }
     }
-    s.handleEvents(e);
 }
 
 void Game::update() {
