@@ -37,7 +37,7 @@ void Ship::handleEvents(SDL_Event e) {
     if ( currentKeyStates[ SDL_SCANCODE_D ] ) {
         posX += velX; 
     }
-    if ( currentKeyStates[ SDL_SCANCODE_SPACE ] && atkSpd % 20 == 0 ) {
+    if ( currentKeyStates[ SDL_SCANCODE_SPACE ] && atkSpd % 5 == 0 ) {
         SDL_GetMouseState(&mouseX, &mouseY);
         calculateBulletVelocity();
         bulletList.push_back(Bullet(posX + hitbox.w / 2, posY + hitbox.h / 2, bulletVelX, bulletVelY));
@@ -54,8 +54,8 @@ void Ship::free() {
 }
 
 void Ship::calculateBulletVelocity() {
-    double dx = mouseX - posX;
-    double dy = mouseY - posY;
+    double dx = mouseX - (posX + hitbox.w / 2);
+    double dy = mouseY - (posY + hitbox.h / 2);;
     double theta = atan2(dy, dx);
     bulletVelX = cos(theta) * 5.0;
     bulletVelY = sin(theta) * 5.0;
