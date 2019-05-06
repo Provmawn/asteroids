@@ -43,7 +43,8 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
 
 void Game::handleEvents() {
     SDL_Event e;
-    SDL_PollEvent(&e);
+    while (SDL_PollEvent(&e))
+        ;
     if (e.type == SDL_QUIT) {
         quit = true;
         return;
