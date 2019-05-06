@@ -4,8 +4,8 @@ extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 
 
-Bullet::Bullet(int x, int y, double vx, double vy) 
-    : posX(x), posY(y), velX(vx), velY(vy), subX(0), subY(0), removeStatus(false)
+Bullet::Bullet(double x, double y, double ax, double ay)
+    : posX(x), posY(y), velX(0.0), velY(0.0), accelX(ax), accelY(ay), subX(0), subY(0), removeStatus(false)
 {
     hitbox.x = 0;
     hitbox.y = 0;
@@ -19,6 +19,8 @@ Bullet::~Bullet() {
 
 void Bullet::update() {
 //update subpixel movement
+    velX += accelX;
+    velY += accelY;
     posX += velX;
     posY += velY;
 //move hitbox to reflect current position

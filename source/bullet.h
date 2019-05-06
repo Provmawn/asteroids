@@ -6,7 +6,7 @@
 
 class Bullet {
     public:
-        Bullet(int x = 0, int y = 0, double vX = 0.0, double vY = 0.0);
+        Bullet(double x = 0.0, double y = 0.0, double ax = 0.0, double ay = 0.0);
         ~Bullet();
         void update();
         void render(SDL_Renderer* render);
@@ -20,12 +20,11 @@ class Bullet {
     private:
         SDL_Rect hitbox;
 	//direct x and y positions
-        int posX;
-        int posY;
+        double posX, posY;
 	//amount of pixels a bullet should move per frame
-        double velX;
-        double velY;
+        double velX, velY;
 	//the amount of sub-pixels the bullet has traveled, used to calculate non integer speeds
+        double accelX, accelY;
 	double subX;
 	double subY;
 

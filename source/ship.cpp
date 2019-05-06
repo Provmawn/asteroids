@@ -1,8 +1,9 @@
 #include "ship.h"
 
 Ship::Ship() 
-    : mouseX(0), mouseY(0), bulletVelX(0), bulletVelY(0), posX(0), posY(0), velX(5), velY(5), hp(3), atkSpd(0),
-      up(false), left(false), down(false), right(false), shooting(false)
+    : mouseX(0), mouseY(0), bulletVelX(0.0), bulletVelY(0.0), posX(0.0), posY(0.0), velX(0.0), velY(0.0), 
+      accelX(.5), accelY(.5), hp(3), atkSpd(0), up(false), left(false), down(false), right(false), 
+      shooting(false)
 {
     hitbox.x = 0;
     hitbox.y = 0;
@@ -14,10 +15,12 @@ Ship::~Ship() {
 }
 
 void Ship::update() {
-    if (up) { posY -= velY; }
-    if (left) { posX -= velX; }
-    if (down) { posY += velY; }
-    if (right) { posX += velX; }
+    if (up) { velY -= accelY; }
+    if (left) { velX -= accelX; }
+    if (down) { velY += accelY; }
+    if (right) { velX += accelX; }
+    posX += velX;
+    posY += velY;
     hitbox.x = posX;
     hitbox.y = posY;
     if (++atkSpd % 10 == 0 && shooting) {
@@ -76,25 +79,6 @@ void Ship::handleEvents(SDL_Event e) {
                 break;
         }
     }
-/*
-    static const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
-    if ( currentKeyStates[ SDL_SCANCODE_W ] ) {
-        posY -= velY; 
-    }
-    if ( currentKeyStates[ SDL_SCANCODE_A ] ) {
-        posX -= velX;
-    }
-    if ( currentKeyStates[ SDL_SCANCODE_S ] ) {
-        posY += velY;
-    }
-    if ( currentKeyStates[ SDL_SCANCODE_D ] ) {
-        posX += velX; 
-    }
-    if ( currentKeyStates[ SDL_SCANCODE_SPACE ] && atkSpd % 5 == 0 ) {
-        SDL_GetMouseState(&mouseX, &mouseY);
-        calculateBulletVelocity();
-        bulletList.push_back(Bullet(posX + hitbox.w / 2, posY + hitbox.h / 2, bulletVelX, bulletVelY));
-    }*/
 }
 
 void Ship::lowerHp() {
@@ -110,8 +94,8 @@ void Ship::calculateBulletVelocity() {
     double dx = mouseX - (posX + hitbox.w / 2);
     double dy = mouseY - (posY + hitbox.h / 2);;
     double theta = atan2(dy, dx);
-    bulletVelX = cos(theta) * 5.0;
-    bulletVelY = sin(theta) * 5.0;
+    bulletVelX = cos(theta) * .5;
+    bulletVelY = sin(theta) * .5;
 }
 
 void Ship::removeBullet(int i) {

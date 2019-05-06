@@ -35,8 +35,9 @@ class Ship {
         int mouseX;
         int mouseY;
         double bulletVelX, bulletVelY;
-        int posX ,posY;
-        int velX, velY;
+        double posX ,posY;
+        double velX, velY;
+        double accelX, accelY;
         int hp;
         unsigned int atkSpd;
         bool up, left, down, right, shooting;
