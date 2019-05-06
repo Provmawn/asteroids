@@ -1,7 +1,10 @@
 #include "ship.h"
 
+extern const int SCREEN_WIDTH;
+extern const int SCREEN_HEIGHT;
+
 Ship::Ship() 
-    : mouseX(0), mouseY(0), bulletVelX(0.0), bulletVelY(0.0), posX(0.0), posY(0.0), velX(0.0), velY(0.0), 
+    : mouseX(0), mouseY(0), bulletAccelX(0.0), bulletAccelY(0.0), posX(0.0), posY(0.0), velX(0.0), velY(0.0), 
       accelX(.5), accelY(.5), hp(3), atkSpd(0), up(false), left(false), down(false), right(false), 
       shooting(false)
 {
@@ -21,12 +24,26 @@ void Ship::update() {
     if (right) { velX += accelX; }
     posX += velX;
     posY += velY;
+    if (posX + hitbox.w > ::SCREEN_WIDTH) { // out of bounds checking for ship
+        posX = ::SCREEN_WIDTH - hitbox.w;
+        velX = 0;
+    } else if (posX < 0) {
+        posX = 0;
+        velX = 0;
+    }
+    if (posY + hitbox.h > ::SCREEN_HEIGHT) {
+        posY = ::SCREEN_HEIGHT - hitbox.h;
+        velY = 0;
+    } else if (posY < 0) {
+        posY = 0;
+        velY = 0;
+    }
     hitbox.x = posX;
     hitbox.y = posY;
     if (++atkSpd % 10 == 0 && shooting) {
         SDL_GetMouseState(&mouseX, &mouseY);
         calculateBulletVelocity();
-        bulletList.push_back(Bullet(posX + hitbox.w / 2, posY + hitbox.h / 2, bulletVelX, bulletVelY));
+        bulletList.push_back(Bullet(posX + hitbox.w / 2, posY + hitbox.h / 2, bulletAccelX, bulletAccelY));
     }
 }
 
@@ -94,8 +111,8 @@ void Ship::calculateBulletVelocity() {
     double dx = mouseX - (posX + hitbox.w / 2);
     double dy = mouseY - (posY + hitbox.h / 2);;
     double theta = atan2(dy, dx);
-    bulletVelX = cos(theta) * .5;
-    bulletVelY = sin(theta) * .5;
+    bulletAccelX = cos(theta) * .5;
+    bulletAccelY = sin(theta) * .5;
 }
 
 void Ship::removeBullet(int i) {

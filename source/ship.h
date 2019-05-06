@@ -34,7 +34,7 @@ class Ship {
         SDL_Rect hitbox;
         int mouseX;
         int mouseY;
-        double bulletVelX, bulletVelY;
+        double bulletAccelX, bulletAccelY;
         double posX ,posY;
         double velX, velY;
         double accelX, accelY;
