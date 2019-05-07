@@ -9,8 +9,8 @@ Bullet::Bullet(double x, double y, double ax, double ay)
 {
     hitbox.x = 0;
     hitbox.y = 0;
-    hitbox.w = 5;
-    hitbox.h = 5;
+    hitbox.w = 1;
+    hitbox.h = 1;
 }
 
 Bullet::~Bullet() {
@@ -24,8 +24,8 @@ void Bullet::update() {
     posX += velX;
     posY += velY;
 //move hitbox to reflect current position
-    hitbox.x = posX + hitbox.w / 2;
-    hitbox.y = posY + hitbox.h / 2;
+    hitbox.x = posX;
+    hitbox.y = posY;
 //destroy bullets that exist the screen
     if (posX < 0 || posX + hitbox.w > ::SCREEN_WIDTH ||
        posY < 0 || posY + hitbox.h > ::SCREEN_HEIGHT) {

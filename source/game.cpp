@@ -1,15 +1,13 @@
 #include "game.h"
 #include <iostream>
 #include <vector>
-#include <algorithm>
-#include <iterator>
 
 static SDL_Renderer* renderer = nullptr;
 
 
-Game::Game() {
-    quit = false;
-    window = NULL;
+Game::Game() 
+    : quit(false), counted_frames(0), fps(0.0f), window(NULL)
+{
     for (int i = 0; i < 20; ++i) {
         rockList.push_back(Rock());
     }
@@ -27,7 +25,7 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
         if (window == NULL) {
             std::cerr << "Could not create window! SDL Error: " << SDL_GetError() << std::endl;
         } else {
-            renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+            renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
             if (renderer == NULL) {
                 std::cerr << "Could not create renderer! SDL Error: " << SDL_GetError() << std::endl;
             } else {
@@ -39,6 +37,42 @@ void Game::init(const char* title, int xpos, int ypos, int width, int height, bo
             }
         }
     }
+}
+
+bool Game::loadMedia() {
+    bool success = true;
+
+    SDL_Texture* texture;
+    if ((texture = loadFromFile("../resources/ship.png")) == nullptr) {
+        std::cerr << "Unable to load ship" << std::endl;
+        success = false;
+    }
+    assets.insert(std::make_pair("ship", texture));
+
+    if ((texture = loadFromFile("../resources/ship_thrust.png")) == nullptr) {
+        std::cerr << "Unable to load ship" << std::endl;
+        success = false;
+    }
+    assets.insert(std::make_pair("ship_thrust", texture));
+
+    return success;
+}
+
+SDL_Texture* Game::loadFromFile(std::string path) {
+    SDL_Texture* loadedTexture = nullptr;
+    SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+    if (loadedSurface == nullptr) {
+        std::cerr << "Unable to load image " << path << "! SDL_image Error: " << IMG_GetError() << std::endl;
+    } else {
+        SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0xFF, 0x00, 0xFF));
+        loadedTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
+        if (loadedTexture == nullptr) {
+            std::cerr << "Unable to create texture from " << path << "! SDL Error: " << SDL_GetError() << std::endl;
+        }
+        SDL_FreeSurface(loadedSurface);
+    }
+    return loadedTexture;
+
 }
 
 void Game::handleEvents() {
@@ -56,6 +90,16 @@ void Game::handleEvents() {
 
 void Game::update() {
 
+    framerate_timer.start();                                            // handle framerate
+    fps = counted_frames / (framerate_timer.getTicks() / 1000.f);       //
+    if (fps > 200000) {                                                 //
+        fps = 0;                                                        //
+    }                                                                   //
+    ++counted_frames;                                                   //
+    int frameTicks = framerate_timer.getTicks();                        //
+    if (frameTicks < 1000 / 60) {                                       //
+        SDL_Delay(1000 / 60 - frameTicks);                              //
+    }                                                                   //
     s.update();
     for (int i = 0; i < rockList.size(); ) {
         rockList[i].update();
@@ -85,14 +129,17 @@ void Game::update() {
         }
         ++i;
     }
-
 }
 
 void Game::render() {
     SDL_SetRenderDrawColor(renderer, 0x00, 0x00, 0x00, 0xFF);
     SDL_RenderClear(renderer);
 
-    s.render(renderer);
+    if (s.isMoving()) {
+        s.render(renderer, (assets.find("ship_thrust"))->second);
+    } else {
+        s.render(renderer, (assets.find("ship"))->second);
+    }
     for (int i = 0; i < s.getBulletListSize(); ++i) {
         s.bulletRender(i, renderer);
     }

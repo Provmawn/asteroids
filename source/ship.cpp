@@ -5,7 +5,7 @@ extern const int SCREEN_HEIGHT;
 
 Ship::Ship() 
     : mouseX(0), mouseY(0), bulletAccelX(0.0), bulletAccelY(0.0), posX(0.0), posY(0.0), velX(0.0), velY(0.0), 
-      accelX(.5), accelY(.5), hp(3), atkSpd(0), up(false), left(false), down(false), right(false), 
+      theta(0.0), accelX(.5), accelY(.5), hp(3), atkSpd(0), up(false), left(false), down(false), right(false), 
       shooting(false)
 {
     hitbox.x = 0;
@@ -40,16 +40,23 @@ void Ship::update() {
     }
     hitbox.x = posX;
     hitbox.y = posY;
+
+    SDL_GetMouseState(&mouseX, &mouseY);
+    dx = mouseX - (posX + hitbox.w / 2);
+    dy = mouseY - (posY + hitbox.h / 2);;
+    theta = atan2(dy, dx);
     if (++atkSpd % 10 == 0 && shooting) {
-        SDL_GetMouseState(&mouseX, &mouseY);
         calculateBulletVelocity();
-        bulletList.push_back(Bullet(posX + hitbox.w / 2, posY + hitbox.h / 2, bulletAccelX, bulletAccelY));
+        bulletX = posX + hitbox.w / 2 + ((5 + hitbox.w / 2) * cos(theta));
+        bulletY = posY + hitbox.w / 2 + ((5 + hitbox.w / 2) * sin(theta));
+        bulletList.push_back(Bullet(bulletX, bulletY, bulletAccelX, bulletAccelY));
     }
 }
 
-void Ship::render(SDL_Renderer* render) {
+
+void Ship::render(SDL_Renderer* render, SDL_Texture* sprite) {
     SDL_SetRenderDrawColor(render, 0xFF, 0xFF, 0xFF, 0xFF);
-    SDL_RenderFillRect(render, &hitbox);
+    SDL_RenderCopyEx(render, sprite, NULL, &hitbox, theta * (180 / M_PI), NULL, SDL_FLIP_NONE);
 }
 
 void Ship::handleEvents(SDL_Event e) {
@@ -108,9 +115,6 @@ void Ship::free() {
 }
 
 void Ship::calculateBulletVelocity() {
-    double dx = mouseX - (posX + hitbox.w / 2);
-    double dy = mouseY - (posY + hitbox.h / 2);;
-    double theta = atan2(dy, dx);
     bulletAccelX = cos(theta) * .5;
     bulletAccelY = sin(theta) * .5;
 }
