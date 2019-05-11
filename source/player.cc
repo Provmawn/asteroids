@@ -1,9 +1,9 @@
-#include "ship.h"
+#include "player.h"
 
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 
-Ship::Ship() 
+Player::Player() 
     : mouseX(0), mouseY(0), bulletAccelX(0.0), bulletAccelY(0.0), posX(0.0), posY(0.0), velX(0.0), velY(0.0), 
       theta(0.0), accelX(.5), accelY(.5), hp(3), atkSpd(0), up(false), left(false), down(false), right(false), 
       shooting(false)
@@ -14,17 +14,20 @@ Ship::Ship()
     hitbox.h = 32;
 }
 
-Ship::~Ship() {
+Player::~Player() {
 }
 
-void Ship::update() {
+void Player::update() {
+    // movement
     if (up) { velY -= accelY; }
     if (left) { velX -= accelX; }
     if (down) { velY += accelY; }
     if (right) { velX += accelX; }
     posX += velX;
     posY += velY;
-    if (posX + hitbox.w > ::SCREEN_WIDTH) { // out of bounds checking for ship
+
+    // out of bounds checking
+    if (posX + hitbox.w > ::SCREEN_WIDTH) {
         posX = ::SCREEN_WIDTH - hitbox.w;
         velX = 0;
     } else if (posX < 0) {
@@ -38,13 +41,18 @@ void Ship::update() {
         posY = 0;
         velY = 0;
     }
+
+    // set position
     hitbox.x = posX;
     hitbox.y = posY;
 
+    // set rotation to mouse
     SDL_GetMouseState(&mouseX, &mouseY);
     dx = mouseX - (posX + hitbox.w / 2);
     dy = mouseY - (posY + hitbox.h / 2);;
     theta = atan2(dy, dx);
+
+    // attack speed
     if (++atkSpd % 10 == 0 && shooting) {
         calculateBulletVelocity();
         bulletX = posX + hitbox.w / 2 + ((5 + hitbox.w / 2) * cos(theta));
@@ -54,14 +62,13 @@ void Ship::update() {
 }
 
 
-void Ship::render(SDL_Renderer* render, SDL_Texture* sprite) {
+void Player::render(SDL_Renderer* render, SDL_Texture* sprite) {
     SDL_SetRenderDrawColor(render, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderCopyEx(render, sprite, NULL, &hitbox, theta * (180 / M_PI), NULL, SDL_FLIP_NONE);
 }
 
-void Ship::handleEvents(SDL_Event e) {
+void Player::handleEvents(SDL_Event e) {
     if (e.type == SDL_KEYDOWN) {
-        std::cout << "KEYDOWN" << std::endl;
         switch (e.key.keysym.sym) {
             case SDLK_w:
                 up = true;
@@ -105,33 +112,25 @@ void Ship::handleEvents(SDL_Event e) {
     }
 }
 
-void Ship::lowerHp() {
+void Player::lowerHp() {
     --hp;
 }
 
-void Ship::free() {
+void Player::free() {
     velX = 0;
     velY = 0;
 }
 
-void Ship::calculateBulletVelocity() {
+void Player::calculateBulletVelocity() {
     bulletAccelX = cos(theta) * .5;
     bulletAccelY = sin(theta) * .5;
 }
 
-void Ship::removeBullet(int i) {
+void Player::removeBullet(int i) {
     std::swap(bulletList[i], bulletList.back());
     bulletList.pop_back();
 }
 
-void Ship::bulletUpdate(int i) {
-    bulletList[i].update();
-}
-
-void Ship::bulletRender(int i, SDL_Renderer* renderer) {
-    bulletList[i].render(renderer);
-}
-
-const SDL_Rect& Ship::getRect() const {
+const SDL_Rect& Player::getRect() const {
     return hitbox;
 }

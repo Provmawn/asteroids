@@ -6,8 +6,9 @@
 #include <cmath>
 #include <unordered_map>
 #include <string>
-#include "ship.h"
-#include "rock.h"
+#include <vector>
+#include "player.h"
+#include "asteroid.h"
 #include "bullet.h"
 #include "timer.h"
 
@@ -18,7 +19,7 @@ class Game {
         ~Game();
         void init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen);
 
-        bool loadMedia();
+        bool loadMedia(); 
         void handleEvents();
         void update();
         void render();
@@ -27,9 +28,10 @@ class Game {
         bool running() { return !quit; }
 
     private:
+        void update_framerate();
         SDL_Texture* loadFromFile(std::string path);
-        Ship s;
-        std::vector<Rock> rockList;
+        Player player;
+        std::vector<Asteroid> asteroids;
 
         float fps;
         unsigned int counted_frames;

@@ -10,7 +10,6 @@ class Bullet {
         ~Bullet();
         void update();
         void render(SDL_Renderer* render);
-	void subpixel();
         void free();
         const SDL_Rect& getRect() const;
 
@@ -19,14 +18,9 @@ class Bullet {
 
     private:
         SDL_Rect hitbox;
-	//direct x and y positions
         double posX, posY;
-	//amount of pixels a bullet should move per frame
         double velX, velY;
-	//the amount of sub-pixels the bullet has traveled, used to calculate non integer speeds
         double accelX, accelY;
-	double subX;
-	double subY;
 
         bool removeStatus;
 };

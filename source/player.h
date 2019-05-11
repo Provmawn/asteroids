@@ -22,14 +22,10 @@ class Player {
 
         bool isMoving() { return up || left || down || right; }
 
-        void bulletUpdate(int i);
-        void bulletRender(int i, SDL_Renderer* renderer);
         void removeBullet(int i);
+        std::vector<Bullet>& getBullets() { return bulletList; }
 
         const SDL_Rect& getBulletHitbox(int i) const { return bulletList[i].getRect(); }
-        int getBulletListSize() { return bulletList.size(); }
-        bool bulletIsRemovable(int i) { return bulletList[i].isRemovable(); }
-        void setBulletRemoveStatus(int i, bool status) { bulletList[i].setRemoveStatus(status); }
     private:
         void calculateBulletVelocity();
         std::vector<Bullet> bulletList;

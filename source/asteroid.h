@@ -1,15 +1,14 @@
-#ifndef ROCK_H
-#define ROCK_H
+#ifndef ASTEROID_H
+#define ASTEROID_H
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <iostream>
 
-class Rock {
+class Asteroid {
     public:
-        Rock();
-        ~Rock();
+        Asteroid();
+        ~Asteroid();
         void update();
-        void subpixel();
         void render(SDL_Renderer* render);
         void free();
         const SDL_Rect& getRect() const;
@@ -20,8 +19,6 @@ class Rock {
         int posY;
         int velX;
         int velY;
-        int subX;
-        int subY;
 };
 
 #endif
