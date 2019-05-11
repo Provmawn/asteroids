@@ -4,6 +4,7 @@ This game is about a space ship that tries to avoid asteroids by shooting them w
 
 ## Controls
 Movement - `wasd`
+
 Shoot - `space`
 Thanks for playing. Enjoy ! 
 
