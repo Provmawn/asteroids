@@ -13,7 +13,7 @@ class Player {
         Player();
         ~Player();
         void update();
-        void render(SDL_Renderer* render, SDL_Texture* sprite);
+        void render(SDL_Renderer* render, SDL_Texture* sprite, int x, int y);
         void handleEvents(SDL_Event e);
         const SDL_Rect& getRect() const;
 
@@ -25,7 +25,11 @@ class Player {
         void removeBullet(int i);
         std::vector<Bullet>& getBullets() { return bulletList; }
 
-        const SDL_Rect& getBulletHitbox(int i) const { return bulletList[i].getRect(); }
+        double getPosX() const { return posX; }
+        double getPosY() const { return posY; }
+        double getWidth() const { return hitbox.w; }
+        double getHeight() const { return hitbox.h; }
+
     private:
         void calculateBulletVelocity();
         std::vector<Bullet> bulletList;

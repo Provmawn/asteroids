@@ -9,7 +9,7 @@ class Asteroid {
         Asteroid();
         ~Asteroid();
         void update();
-        void render(SDL_Renderer* render);
+        void render(SDL_Renderer* render, SDL_Texture* sprite, int x, int y);
         void free();
         const SDL_Rect& getRect() const;
 

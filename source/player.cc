@@ -1,5 +1,7 @@
 #include "player.h"
 
+extern const int LEVEL_WIDTH;
+extern const int LEVEL_HEIGHT;
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 
@@ -26,31 +28,11 @@ void Player::update() {
     posX += velX;
     posY += velY;
 
-    // out of bounds checking
-    if (posX + hitbox.w > ::SCREEN_WIDTH) {
-        posX = ::SCREEN_WIDTH - hitbox.w;
-        velX = 0;
-    } else if (posX < 0) {
-        posX = 0;
-        velX = 0;
-    }
-    if (posY + hitbox.h > ::SCREEN_HEIGHT) {
-        posY = ::SCREEN_HEIGHT - hitbox.h;
-        velY = 0;
-    } else if (posY < 0) {
-        posY = 0;
-        velY = 0;
-    }
 
     // set position
     hitbox.x = posX;
     hitbox.y = posY;
 
-    // set rotation to mouse
-    SDL_GetMouseState(&mouseX, &mouseY);
-    dx = mouseX - (posX + hitbox.w / 2);
-    dy = mouseY - (posY + hitbox.h / 2);;
-    theta = atan2(dy, dx);
 
     // attack speed
     if (++atkSpd % 10 == 0 && shooting) {
@@ -62,9 +44,30 @@ void Player::update() {
 }
 
 
-void Player::render(SDL_Renderer* render, SDL_Texture* sprite) {
+void Player::render(SDL_Renderer* render, SDL_Texture* sprite, int x, int y) {
     SDL_SetRenderDrawColor(render, 0xFF, 0xFF, 0xFF, 0xFF);
-    SDL_RenderCopyEx(render, sprite, NULL, &hitbox, theta * (180 / M_PI), NULL, SDL_FLIP_NONE);
+    // out of bounds checking
+    if (posX + hitbox.w > ::LEVEL_WIDTH) {
+        posX = ::LEVEL_WIDTH - hitbox.w;
+        velX = 0;
+    } else if (posX < 0) {
+        posX = 0;
+        velX = 0;
+    }
+    if (posY + hitbox.h > ::LEVEL_HEIGHT) {
+        posY = ::LEVEL_HEIGHT - hitbox.h;
+        velY = 0;
+    } else if (posY < 0) {
+        posY = 0;
+        velY = 0;
+    }
+    // set rotation to mouse
+    SDL_GetMouseState(&mouseX, &mouseY);
+    dx = mouseX - (posX - x + hitbox.w / 2);
+    dy = mouseY - (posY - y + hitbox.h / 2);
+    theta = atan2(dy, dx);
+    SDL_Rect renderQuad = {static_cast<int>(posX) - x, static_cast<int>(posY) - y, hitbox.w, hitbox.h};
+    SDL_RenderCopyEx(render, sprite, NULL, &renderQuad, theta * (180 / M_PI), NULL, SDL_FLIP_NONE);
 }
 
 void Player::handleEvents(SDL_Event e) {

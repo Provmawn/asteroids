@@ -26,9 +26,11 @@ class Game {
         void close();
 
         bool running() { return !quit; }
+        const SDL_Rect& getCamera() const { return camera; }
 
     private:
         void update_framerate();
+        SDL_Rect camera;
         SDL_Texture* loadFromFile(std::string path);
         Player player;
         std::vector<Asteroid> asteroids;

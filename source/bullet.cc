@@ -1,7 +1,7 @@
 #include "bullet.h"
 
-extern const int SCREEN_WIDTH;
-extern const int SCREEN_HEIGHT;
+extern const int LEVEL_WIDTH;
+extern const int LEVEL_HEIGHT;
 
 
 Bullet::Bullet(double x, double y, double ax, double ay)
@@ -23,21 +23,17 @@ void Bullet::update() {
     posY += velY;
     hitbox.x = posX;
     hitbox.y = posY;
-    if (posX < 0 || posX + hitbox.w > ::SCREEN_WIDTH ||
-       posY < 0 || posY + hitbox.h > ::SCREEN_HEIGHT) {
+    if (posX < 0 || posX + hitbox.w > ::LEVEL_WIDTH ||
+       posY < 0 || posY + hitbox.h > ::LEVEL_HEIGHT) {
         removeStatus = true;
     }
 }
 
-void Bullet::render(SDL_Renderer* render) {
+void Bullet::render(SDL_Renderer* render, SDL_Texture* sprite, int x, int y) {
     SDL_SetRenderDrawColor(render, 0xFF, 0xFF, 0xFF, 0xFF);
-    SDL_RenderFillRect(render, &hitbox);
+    SDL_Rect renderQuad = {static_cast<int>(posX) - x, static_cast<int>(posY) - y, hitbox.w, hitbox.h};
+    SDL_RenderCopyEx(render, sprite, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
 }
 
 void Bullet::free() {
 }
-
-const SDL_Rect& Bullet::getRect() const {
-    return hitbox;
-}
-

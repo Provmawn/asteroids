@@ -2,13 +2,22 @@
 
 static SDL_Renderer* renderer = nullptr;
 
+extern const int LEVEL_HEIGHT;
+extern const int LEVEL_WIDTH;
+extern const int SCREEN_WIDTH;
+extern const int SCREEN_HEIGHT;
 
 Game::Game() 
     : quit(false), counted_frames(0), fps(0.0f), window(NULL)
 {
-    for (int i = 0; i < 20; ++i) {
+    ;
+    for (int i = 0; i < 40; ++i) {
         asteroids.push_back(Asteroid());
     }
+    camera.x = 0;
+    camera.y = 0;
+    camera.w = SCREEN_WIDTH;
+    camera.h = SCREEN_HEIGHT;
 }
 
 Game::~Game() {
@@ -53,6 +62,17 @@ bool Game::loadMedia() {
     }
     assets.insert(std::make_pair("ship_thrust", texture));
 
+    if ((texture = loadFromFile("../resources/asteroid.png")) == nullptr) {
+        std::cerr << "Unable to load ship" << std::endl;
+        success = false;
+    }
+    assets.insert(std::make_pair("asteroid", texture));
+    
+    if ((texture = loadFromFile("../resources/bullet.png")) == nullptr) {
+        std::cerr << "Unable to load ship" << std::endl;
+        success = false;
+    }
+    assets.insert(std::make_pair("bullet", texture));
     return success;
 }
 
@@ -103,7 +123,25 @@ void Game::update() {
 
     update_framerate();
 
+    // go to player and subtract half of the screen width/height to center player
+
     player.update();    // player
+
+    camera.x = player.getPosX() - ::SCREEN_WIDTH / 2;
+    camera.y = player.getPosY() - ::SCREEN_HEIGHT / 2;
+
+    if (camera.x < 0) {
+        camera.x = 0;
+    }
+    if (camera.x > ::LEVEL_WIDTH - camera.w) {
+        camera.x = ::LEVEL_WIDTH - camera.w;
+    }
+    if (camera.y < 0) {
+        camera.y = 0;
+    }
+    if (camera.y > ::LEVEL_HEIGHT - camera.h) {
+        camera.y = ::LEVEL_HEIGHT - camera.h;
+    }
 
     for (int i = 0; i < asteroids.size(); ) {   // asteroids
         asteroids[i].update();
@@ -119,7 +157,7 @@ void Game::update() {
     for (int i = 0; i < bullets.size(); ) {
         bullets[i].update();
         for (int j = 0; j < asteroids.size(); ) {
-            if (SDL_HasIntersection(&(player.getBulletHitbox(i)), &(asteroids[j].getRect())) == SDL_TRUE) {
+            if (SDL_HasIntersection(&(bullets[i].getHitbox()), &(asteroids[j].getRect())) == SDL_TRUE) {
                 bullets[i].setRemoveStatus(true);
 
                 std::swap(asteroids[j], asteroids.back());
@@ -140,18 +178,17 @@ void Game::render() {
     SDL_RenderClear(renderer);
 
     if (player.isMoving()) {
-        player.render(renderer, (assets.find("ship_thrust"))->second);
+        player.render(renderer, (assets.find("ship_thrust"))->second, camera.x, camera.y);
     } else {
-        player.render(renderer, (assets.find("ship"))->second);
+        player.render(renderer, (assets.find("ship"))->second, camera.x, camera.y);
     }
     std::vector<Bullet>& bullets = player.getBullets();
     for (int i = 0; i < bullets.size(); ++i) {
-        bullets[i].render(renderer);
+        bullets[i].render(renderer, (assets.find("bullet"))->second, camera.x, camera.y);
     }
     for (int i = 0; i < asteroids.size(); ++i) {
-        asteroids[i].render(renderer);
+        asteroids[i].render(renderer, (assets.find("asteroid"))->second, camera.x, camera.y);
     }
-
     SDL_RenderPresent(renderer);
 }
 

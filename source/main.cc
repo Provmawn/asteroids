@@ -7,8 +7,8 @@ Game game;
 extern const int LEVEL_WIDTH = 3000;
 extern const int LEVEL_HEIGHT = 2250;
 
-extern const int SCREEN_WIDTH = 1280;
-extern const int SCREEN_HEIGHT = 960;
+extern const int SCREEN_WIDTH = 1080;
+extern const int SCREEN_HEIGHT = 720;
 
 int main(int argc, const char* argv[]) {
     srand(time(nullptr));
