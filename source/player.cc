@@ -35,7 +35,7 @@ void Player::update() {
 
 
     // attack speed
-    if (++atkSpd % 10 == 0 && shooting) {
+    if (++atkSpd % 1 == 0 && shooting) {
         calculateBulletVelocity();
         bulletX = posX + hitbox.w / 2 + ((5 + hitbox.w / 2) * cos(theta));
         bulletY = posY + hitbox.w / 2 + ((5 + hitbox.w / 2) * sin(theta));
