@@ -1,6 +1,6 @@
 # Asteroids
 
-This game is about a space ship that tries to avoid asteroids by shooting them with bullets. 
+This is the Asteroids game but with modifications that make it more entertaining. This was built with the SDL Library.
 
 ## Controls
 Movement - `wasd`
